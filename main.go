@@ -8,8 +8,8 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"github.com/appleboy/gorush/config"
-	"github.com/appleboy/gorush/gorush"
+	"github.com/4rakcheev/gorush/config"
+	"github.com/4rakcheev/gorush/gorush"
 )
 
 func checkInput(token, message string) {

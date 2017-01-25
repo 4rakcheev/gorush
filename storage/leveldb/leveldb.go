@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/appleboy/gorush/config"
+	"github.com/4rakcheev/gorush/config"
 	"github.com/syndtr/goleveldb/leveldb"
 )
 
@@ -37,7 +37,7 @@ func getLevelDB(key string, count *int64) {
 	defer db.Close()
 }
 
-// New func implements the storage interface for gorush (https://github.com/appleboy/gorush)
+// New func implements the storage interface for gorush (https://github.com/4rakcheev/gorush)
 func New(config config.ConfYaml) *Storage {
 	return &Storage{
 		config: config,

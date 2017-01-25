@@ -1,5 +1,5 @@
 workspace:
-  path: /go/src/github.com/appleboy/gorush
+  path: /go/src/github.com/4rakcheev/gorush
 
 pipeline:
   clone:
@@ -8,13 +8,13 @@ pipeline:
 
   # restore the cache from an sftp server
   restore_cache:
-    image: appleboy/drone-sftp-cache
+    image: 4rakcheev/drone-sftp-cache
     restore: true
     mount: [ .glide, vendor ]
     ignore_branch: true
 
   build:
-    image: appleboy/golang-testing:${GO_VERSION}
+    image: 4rakcheev/golang-testing:${GO_VERSION}
     environment:
       - GOPATH=/go
     commands:
@@ -29,7 +29,7 @@ pipeline:
       - make docker_build
 
   release:
-    image: appleboy/golang-testing:${GO_VERSION}
+    image: 4rakcheev/golang-testing:${GO_VERSION}
     pull: true
     environment:
       TAGS: netgo
@@ -43,7 +43,7 @@ pipeline:
 
   docker:
     image: plugins/docker
-    repo: appleboy/gorush
+    repo: 4rakcheev/gorush
     tags: [ '${DRONE_TAG}' ]
     when:
       event: [ tag ]
@@ -51,14 +51,14 @@ pipeline:
 
   docker:
     image: plugins/docker
-    repo: appleboy/gorush
+    repo: 4rakcheev/gorush
     tags: [ 'latest' ]
     when:
       event: [ push ]
       branch: [ master ]
 
   facebook:
-    image: appleboy/drone-facebook
+    image: 4rakcheev/drone-facebook
     pull: true
     to: 1234973386524610
     when:
@@ -78,7 +78,7 @@ pipeline:
 
   # rebuild the cache on the sftp server
   rebuild_cache:
-    image: appleboy/drone-sftp-cache
+    image: 4rakcheev/drone-sftp-cache
     rebuild: true
     mount: [ .glide, vendor ]
     ignore_branch: true

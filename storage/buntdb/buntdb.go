@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/appleboy/gorush/config"
+	"github.com/4rakcheev/gorush/config"
 	"github.com/tidwall/buntdb"
 )
 
@@ -17,7 +17,7 @@ const (
 	AndroidErrorKey   = "gorush-android-error-count"
 )
 
-// New func implements the storage interface for gorush (https://github.com/appleboy/gorush)
+// New func implements the storage interface for gorush (https://github.com/4rakcheev/gorush)
 func New(config config.ConfYaml) *Storage {
 	return &Storage{
 		config: config,

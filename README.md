@@ -2,7 +2,7 @@
 
 A push notification micro server using [Gin](https://github.com/gin-gonic/gin) framework written in Go (Golang).
 
-[![GoDoc](https://godoc.org/github.com/appleboy/gorush?status.svg)](https://godoc.org/github.com/appleboy/gorush) [![Build Status](http://drone.wu-boy.com/api/badges/appleboy/gorush/status.svg)](http://drone.wu-boy.com/appleboy/gorush) [![codecov](https://codecov.io/gh/appleboy/gorush/branch/master/graph/badge.svg)](https://codecov.io/gh/appleboy/gorush) [![Go Report Card](https://goreportcard.com/badge/github.com/appleboy/gorush)](https://goreportcard.com/report/github.com/appleboy/gorush) [![codebeat badge](https://codebeat.co/badges/0a4eff2d-c9ac-46ed-8fd7-b59942983390)](https://codebeat.co/projects/github-com-appleboy-gorush) [![Docker Pulls](https://img.shields.io/docker/pulls/appleboy/gorush.svg)](https://hub.docker.com/r/appleboy/gorush/) [![](https://images.microbadger.com/badges/image/appleboy/gorush.svg)](https://microbadger.com/images/appleboy/gorush "Get your own image badge on microbadger.com")
+[![GoDoc](https://godoc.org/github.com/4rakcheev/gorush?status.svg)](https://godoc.org/github.com/4rakcheev/gorush) [![Build Status](http://drone.wu-boy.com/api/badges/4rakcheev/gorush/status.svg)](http://drone.wu-boy.com/4rakcheev/gorush) [![codecov](https://codecov.io/gh/4rakcheev/gorush/branch/master/graph/badge.svg)](https://codecov.io/gh/4rakcheev/gorush) [![Go Report Card](https://goreportcard.com/badge/github.com/4rakcheev/gorush)](https://goreportcard.com/report/github.com/4rakcheev/gorush) [![codebeat badge](https://codebeat.co/badges/0a4eff2d-c9ac-46ed-8fd7-b59942983390)](https://codebeat.co/projects/github-com-4rakcheev-gorush) [![Docker Pulls](https://img.shields.io/docker/pulls/4rakcheev/gorush.svg)](https://hub.docker.com/r/4rakcheev/gorush/) [![](https://images.microbadger.com/badges/image/4rakcheev/gorush.svg)](https://microbadger.com/images/4rakcheev/gorush "Get your own image badge on microbadger.com")
 
 ## Contents
 
@@ -119,30 +119,30 @@ How to send push notification using `gorush` command? (Android or iOS)
 
 ### Download a binary
 
-The pre-compiled binaries can be downloaded from [release page](https://github.com/appleboy/gorush/releases).
+The pre-compiled binaries can be downloaded from [release page](https://github.com/4rakcheev/gorush/releases).
 
 With `Go` installed
 
 ```
-$ go get -u -v github.com/appleboy/gorush
+$ go get -u -v github.com/4rakcheev/gorush
 ```
 
 On linux
 
 ```sh
-$ wget https://github.com/appleboy/gorush/releases/download/v1.7.4/gorush-v1.7.4-linux-amd64 -O gorush
+$ wget https://github.com/4rakcheev/gorush/releases/download/v1.7.4/gorush-v1.7.4-linux-amd64 -O gorush
 ```
 
 On OS X
 
 ```sh
-$ wget https://github.com/appleboy/gorush/releases/download/v1.7.4/gorush-v1.7.4-darwin-amd64 -O gorush
+$ wget https://github.com/4rakcheev/gorush/releases/download/v1.7.4/gorush-v1.7.4-darwin-amd64 -O gorush
 ```
 
 On Windows
 
 ```sh
-$ wget https://github.com/appleboy/gorush/releases/download/v1.7.4/gorush-v1.7.4-windows-amd64.exe -O gorush.exe
+$ wget https://github.com/4rakcheev/gorush/releases/download/v1.7.4/gorush-v1.7.4-windows-amd64.exe -O gorush.exe
 ```
 
 ### Command Usage
@@ -577,18 +577,18 @@ Success response:
 
 ## Run gorush in Docker
 
-Set up `gorush` in the cloud in under 5 minutes with zero knowledge of Golang or Linux shell using our [gorush Docker image](https://hub.docker.com/r/appleboy/gorush/).
+Set up `gorush` in the cloud in under 5 minutes with zero knowledge of Golang or Linux shell using our [gorush Docker image](https://hub.docker.com/r/4rakcheev/gorush/).
 
 ```bash
-$ docker pull appleboy/gorush
-$ docker run --name gorush -p 80:8088 appleboy/gorush
+$ docker pull 4rakcheev/gorush
+$ docker run --name gorush -p 80:8088 4rakcheev/gorush
 ```
 
 Run `gorush` with your own config file.
 
 ```bash
-$ docker pull appleboy/gorush
-$ docker run --name gorush -v ${PWD}/config.yml:/config.yml -p 80:8088 appleboy/gorush
+$ docker pull 4rakcheev/gorush
+$ docker run --name gorush -v ${PWD}/config.yml:/config.yml -p 80:8088 4rakcheev/gorush
 ```
 
 Testing your gorush server using [httpie](https://github.com/jkbrzt/httpie) command.
@@ -601,6 +601,6 @@ $ http -v --verify=no --json GET http://your.docker.host/api/stat/go
 
 ## License
 
-Copyright 2016 Bo-Yi Wu [@appleboy](https://twitter.com/appleboy).
+Copyright 2016 Bo-Yi Wu [@4rakcheev](https://twitter.com/4rakcheev).
 
 Licensed under the MIT License.

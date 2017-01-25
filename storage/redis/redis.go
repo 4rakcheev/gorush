@@ -4,7 +4,7 @@ import (
 	"log"
 	"strconv"
 
-	"github.com/appleboy/gorush/config"
+	"github.com/4rakcheev/gorush/config"
 	"gopkg.in/redis.v5"
 )
 
@@ -20,7 +20,7 @@ const (
 //
 var redisClient *redis.Client
 
-// New func implements the storage interface for gorush (https://github.com/appleboy/gorush)
+// New func implements the storage interface for gorush (https://github.com/4rakcheev/gorush)
 func New(config config.ConfYaml) *Storage {
 	return &Storage{
 		config: config,

@@ -128,9 +128,9 @@ imports:
   version: 8f0908ab3b2457e2e15403d3697c9ef5cb4b57a9
   subpackages:
   - unix
-- name: gopkg.in/appleboy/gin-status-api.v1
+- name: gopkg.in/4rakcheev/gin-status-api.v1
   version: d41a075a5a6883245b7fdefbefd4fa4d1462e1f1
-- name: gopkg.in/appleboy/gofight.v2
+- name: gopkg.in/4rakcheev/gofight.v2
   version: beadc315fb676177c07a89c34159b9ca4e1aafd9
 - name: gopkg.in/fukata/golang-stats-api-handler.v1
   version: 90f0b59102629831cc109845475a8d77043412ec
