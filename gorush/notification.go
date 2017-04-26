@@ -83,6 +83,83 @@ type PushNotification struct {
 	Alert      Alert    `json:"alert,omitempty"`
 }
 
+
+// The possible Reason error codes returned from Google.
+// From google table https://developers.google.com/cloud-messaging/http-server-ref#error-codes and Remote Notification Programming Guide.
+const (
+	//Check that the request contains a registration ID (either in the registration_id parameter in a plain text message,
+	// or in the registration_ids field in JSON).
+	ReasonMissingRegistration = "MissingRegistration"
+
+	// Check the formatting of the registration ID that you pass to the server.
+	// Make sure it matches the registration ID the phone receives in the com.google.android.c2dm.intent.
+	// REGISTRATION intent and that you're not truncating it or adding additional characters
+	ReasonInvalidRegistration = "InvalidRegistration"
+
+	//A registration ID is tied to a certain group of senders.
+	//When an application registers for GCM usage, it must specify which senders are allowed to send messages.
+	// Make sure you're using one of those when trying to send messages to the device.
+	// If you switch to a different sender, the existing registration IDs won't work.
+	ReasonMismatchSenderId = "MismatchSenderId"
+
+	//An existing registration ID may cease to be valid in a number of scenarios, including:
+	//If the application manually unregisters by issuing a com.google.android.c2dm.intent.UNREGISTER intent.
+	//If the application is automatically unregistered, which can happen (but is not guaranteed) if the user uninstalls the application.
+	//If the registration ID expires. Google might decide to refresh registration IDs.
+	//If the application is updated but the new version does not have a broadcast receiver configured to receive com.google.android.c2dm.intent.RECEIVE intents.
+	//For all these cases, you should remove this registration ID from the 3rd-party server and stop using it to send messages
+	ReasonNotRegistered = "NotRegistered"
+
+	//The total size of the payload data that is included in a message can't exceed 4096 bytes.
+	//Note that this includes both the size of the keys as well as the values
+	ReasonMessageTooBig = "MessageTooBig"
+
+	//The payload data contains a key (such as from or any value prefixed by google.)
+	//that is used internally by GCM in the com.google.android.c2dm.intent.RECEIVE Intent and cannot be used.
+	//Note that some words (such as collapse_key) are also used by GCM but are allowed in the payload,
+	// in which case the payload value will be overridden by the GCM value
+	ReasonInvalidDataKey = "InvalidDataKey"
+
+	//The value for the Time to Live field must be an integer representing a duration in seconds between 0 and 2,419,200 (4 weeks)
+	ReasonInvalidTtl = "InvalidTtl"
+
+	//The server encountered an error while trying to process the request.
+	// You could retry the same request (obeying the requirements listed in the Timeout section),
+	// but if the error persists, please report the problem in the android-gcm group.
+	// Happens when the HTTP status code is 500, or when the error field of a JSON object in the results array is
+	ReasonInternalServerError = "InternalServerError"
+
+	// A message was addressed to a registration ID whose package name did not match the value passed in the request.
+	ReasonInvalidPackageName = "InvalidPackageName"
+
+	//The server couldn't process the request in time. Retry the same reques
+	ReasonUnavailable = "Unavailable"
+
+	//The rate of messages to a particular device is too high.
+	//Reduce the number of messages sent to this device and do not immediately retry sending to this device.
+	ReasonDeviceMessageRateExceeded = "DeviceMessageRateExceeded"
+
+	//The rate of messages to subscribers to a particular topic is too high.
+	//Reduce the number of messages sent for this topic, and do not immediately retry sending.
+	ReasonTopicsMessageRateExceeded = "TopicsMessageRateExceeded"
+
+	//A message targeted to an iOS device could not be sent because the required APNs SSL certificate was not
+	//uploaded or has expired. Check the validity of your development and production certificates.
+	ReasonInvalidApnsCredential = "InvalidApnsCredential"
+)
+
+// Response represents a result from the APNs gateway indicating whether a
+// notification was accepted or rejected and (if applicable) the metadata
+// surrounding the rejection.
+type GoogleResponse struct {
+
+	// The Google error string indicating the reason for the notification failure (if
+	// any). The error code is specified as a string. For a list of possible
+	// values, see the Reason constants above.
+	Reason string
+}
+
+
 // CheckMessage for check request message
 func CheckMessage(req PushNotification) error {
 	var msg string
@@ -453,8 +530,15 @@ func GetAndroidNotification(req PushNotification) gcm.HttpMessage {
 	return notification
 }
 
-// PushToAndroid provide send notification to Android server.
 func PushToAndroid(req PushNotification) bool {
+	var isError bool
+	_, isError = PushToAndroidWithErrorResult(req)
+	return isError
+}
+
+
+// PushToAndroid provide send notification to Android server.
+func PushToAndroidWithErrorResult(req PushNotification) (*map[string]*GoogleResponse,bool) {
 	LogAccess.Debug("Start push notification for Android")
 
 	var APIKey string
@@ -468,14 +552,19 @@ func PushToAndroid(req PushNotification) bool {
 	// check message
 	err := CheckMessage(req)
 
+	var returnResultList map[string]*GoogleResponse
+	returnResultList = make(map[string]*GoogleResponse)
+
 	if err != nil {
 		LogError.Error("request error: " + err.Error())
-		return false
+		return &returnResultList, true
 	}
 
 Retry:
 	var isError = false
 	notification := GetAndroidNotification(req)
+
+	returnResultList = make(map[string]*GoogleResponse)
 
 	if APIKey = PushConf.Android.APIKey; req.APIKey != "" {
 		APIKey = req.APIKey
@@ -486,8 +575,7 @@ Retry:
 	if err != nil {
 		// GCM server error
 		LogError.Error("GCM server error: " + err.Error())
-
-		return false
+		return &returnResultList, true
 	}
 
 	LogAccess.Debug(fmt.Sprintf("Android Success count: %d, Failure count: %d", res.Success, res.Failure))
@@ -500,6 +588,11 @@ Retry:
 			isError = true
 			newTokens = append(newTokens, req.Tokens[k])
 			LogPush(FailedPush, req.Tokens[k], req, errors.New(result.Error))
+
+			response := &GoogleResponse{}
+			response.Reason = result.Error
+
+			returnResultList[req.Tokens[k]] = response
 			continue
 		}
 
@@ -514,5 +607,5 @@ Retry:
 		goto Retry
 	}
 
-	return true
+	return &returnResultList,isError
 }
